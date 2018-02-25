@@ -51,7 +51,16 @@ static const char unknown_str[] = "n/a";
  */
 static const struct arg args[] = {
 	/* function format          argument */
-	{ cpu_perc, "[CPU %3s%%] ", NULL    },
-	{ ram_perc, "[RAM %2s%%] ", NULL    },
-	{ datetime, "[ %s ]",       "%F %T" },
+	{ text_file,     "mail: %s",      "/home/krikava/Mail/.status_outbox" },
+	{ text_file,     " - %s",         "/home/krikava/Mail/.status_inbox" },
+    { wifi_essid,    " wifi: %s",     "wlp58s0" },
+    { wifi_perc,     " (%2s%%)",      "wlp58s0" },
+	{ cpu_perc,      " sys: %3s%%",   NULL    },
+	{ load_avg,      " (%s)",         "%.1f %.1f %.1f" },
+	{ ram_perc,      " - %2s%%",      NULL    },
+	{ disk_free,     " - %sG",        "/"     },
+    { battery_perc,  " bat: %3s%%",    "BAT0"  },
+    { battery_rem,   " (%5s)",        "BAT0"  },
+    { battery_state, "%s",            "BAT0"  },
+	{ datetime,      " time: %s",     "%F %T" },
 };
