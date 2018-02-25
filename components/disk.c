@@ -15,7 +15,7 @@ disk_free(const char *mnt)
 		return NULL;
 	}
 
-	return bprintf("%f", (float)fs.f_bsize * (float)fs.f_bfree / 1024 / 1024 / 1024);
+	return bprintf("%3.0f", (float)fs.f_bsize * (float)fs.f_bfree / 1024 / 1024 / 1024);
 }
 
 const char *
