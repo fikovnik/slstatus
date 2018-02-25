@@ -45,7 +45,7 @@ difftimespec(struct timespec *res, struct timespec *a, struct timespec *b)
 static void
 usage(void)
 {
-	fprintf(stderr, "usage: %s [-s]\n", argv0);
+	fprintf(stderr, "usage: %s [-s|-j]\n", argv0);
 	exit(1);
 }
 
@@ -56,12 +56,16 @@ main(int argc, char *argv[])
 	struct timespec start, current, diff, intspec, wait;
 	size_t i, len;
 	int sflag = 0;
+    int jflag = 0;
 	char status[MAXLEN];
 
 	ARGBEGIN {
 		case 's':
 			sflag = 1;
 			break;
+        case 'j':
+            jflag = 1;
+            break;
 		default:
 			usage();
 	} ARGEND
@@ -77,10 +81,19 @@ main(int argc, char *argv[])
 	sigaction(SIGINT,  &act, NULL);
 	sigaction(SIGTERM, &act, NULL);
 
-	if (!sflag && !(dpy = XOpenDisplay(NULL))) {
+	if ((!sflag || !jflag) && !(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "slstatus: cannot open display");
 		return 1;
 	}
+
+    if (sflag && jflag) {
+		fprintf(stderr, "slstatus: only one of -s or -j can be used");
+		return 1;
+    }
+
+    if (jflag) {
+        printf("{ \"version\": 1 }\n[\n");
+    }
 
 	while (!done) {
 		clock_gettime(CLOCK_MONOTONIC, &start);
@@ -99,6 +112,9 @@ main(int argc, char *argv[])
 
 		if (sflag) {
 			printf("%s\n", status);
+        } else if (jflag) {
+            printf("[{\"full_text\":\"%s\"}],\n", status);
+            fflush(stdout);
 		} else {
 			XStoreName(dpy, DefaultRootWindow(dpy), status);
 			XSync(dpy, False);
