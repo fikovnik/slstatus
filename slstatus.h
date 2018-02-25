@@ -57,6 +57,9 @@ const char *swap_perc(void);
 const char *swap_total(void);
 const char *swap_used(void);
 
+/* text */
+const char *text_file(const char *);
+
 /* temperature */
 const char *temp(const char *);
 
