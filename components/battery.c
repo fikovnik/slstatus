@@ -66,15 +66,23 @@ battery_rem(const char *bat)
     char path[PATH_MAX];
     const char *status = battery_state(bat);
 
+    if (status == NULL) {
+        return NULL;
+    }
+
+    if (!strcmp(status, "/")) {
+        return " est ";
+    }
+
+    if (!strcmp(status, "=")) {
+        return " pwr ";
+    }
+
     if (last_status != NULL && strcmp(status, last_status)) {
         memset(rems, 0.0, sizeof(rems));
         curr = 0;
     }
     last_status = status;
-
-    if (strcmp(status, "-") && strcmp(status, "+")) {
-        return "  n/a  ";
-    }
 
     int charge_full, charge_now, current_now;
     float rem;
