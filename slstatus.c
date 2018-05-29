@@ -57,6 +57,7 @@ main(int argc, char *argv[])
 	size_t i, len;
 	int sflag = 0;
     int jflag = 0;
+    int oneoff = 0;
 	char status[MAXLEN];
 
 	ARGBEGIN {
@@ -65,6 +66,9 @@ main(int argc, char *argv[])
 			break;
         case 'j':
             jflag = 1;
+            break;
+        case '1':
+            oneoff = 1;
             break;
 		default:
 			usage();
@@ -119,6 +123,10 @@ main(int argc, char *argv[])
 			XStoreName(dpy, DefaultRootWindow(dpy), status);
 			XSync(dpy, False);
 		}
+
+        if (oneoff) {
+            done = 1;
+        }
 
 		if (!done) {
 			clock_gettime(CLOCK_MONOTONIC, &current);
